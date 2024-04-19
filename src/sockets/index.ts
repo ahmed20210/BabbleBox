@@ -20,6 +20,7 @@ const syncMessagesWhenOnline = async (userId, socket) => {
 
 const setupSocket = (io) => {
   io.on("connection", (socket) => {
+    console.log("connected");
     const { userId } = socket.request.user;
 
     socket.join(userId);

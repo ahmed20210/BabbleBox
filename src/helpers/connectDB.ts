@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
 
 
-const MONGODB_URI =
-  "mongodb+srv://ahmedmostafa:01144781238ahmed@ecommerce.lxpr7.mongodb.net/?retryWrites=true&w=majorityx";
+const MONGODB_URI = process.env.DB_URL
 
 // Connect to MongoDB
 const startConnection = () => {

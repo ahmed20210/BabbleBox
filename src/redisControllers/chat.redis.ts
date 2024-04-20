@@ -8,13 +8,13 @@ import {
 const saveMessage = async (message, userId) => {
   const stringifiedMessage = JSON.stringify(message);
 
-  await redisClient.rPush(`messages:${userId}`, stringifiedMessage);
+  await(await redisClient).rPush(`messages:${userId}`, stringifiedMessage);
 };
 
 const togglePinMessage = async (Message, userId) => {
   const stringifiedMessage = JSON.stringify(Message);
 
-  await redisClient.rPush(`tooglePinnedMessages:${userId}`, stringifiedMessage);
+  await (await redisClient).rPush(`tooglePinnedMessages:${userId}`, stringifiedMessage);
 };
 
 const saveReactedMessage = async (message, userId) => {
@@ -28,7 +28,7 @@ const deleteMessage = async (messageId, userId) => {
 };
 
 const sendSavedMessages = async (userId, socket) => {
-  const messages = await redisClient.lRange(`messages:${userId}`, 0, -1);
+  const messages = await (await redisClient).lPop(`messages:${userId}`, 0, -1);
   messages.forEach((message) => {
     socket.emit(READ_MESSAGE, JSON.parse(message));
   });
@@ -36,7 +36,7 @@ const sendSavedMessages = async (userId, socket) => {
 };
 
 const sendPinnedMessages = async (userId, socket) => {
-  const messages = await redisClient.lRange(
+  const messages = await (await redisClient).lPop(
     `tooglePinnedMessages:${userId}`,
     0,
     -1
@@ -48,7 +48,7 @@ const sendPinnedMessages = async (userId, socket) => {
 };
 
 const sendReactedMessages = async (userId, socket) => {
-  const messages = await redisClient.lRange(`reactedMessages:${userId}`, 0, -1);
+  const messages = await (await redisClient).lPop(`reactedMessages:${userId}`, 0, -1);
   messages.forEach((message) => {
     socket.emit(TOGGLE_MESSAGE_REACT, JSON.parse(message));
   });
@@ -56,7 +56,7 @@ const sendReactedMessages = async (userId, socket) => {
 };
 
 const sendDeleteEvents = async (userId, socket) => {
-  const messages = await redisClient.lRange(`deleteEvents:${userId}`, 0, -1);
+  const messages = await (await redisClient).lPop(`deleteEvents:${userId}`, 0, -1);
   messages.forEach((message) => {
     socket.emit(DELETE_MESSAGE, JSON.parse(message));
   });

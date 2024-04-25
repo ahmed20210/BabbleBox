@@ -11,6 +11,7 @@ export  function connectRedis() {
   // await client.connect();
   client.on("error", (err) => console.log("Redis Client Error", err));
 
+  
   return client;
 }
 
